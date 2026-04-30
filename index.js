@@ -20,7 +20,7 @@ module.exports = class RqliteCache {
   }
   async _createTable(){
     try{
-      let sql = `CREATE TABLE IF NOT EXISTS ${this._table_name} (id TEXT PRIMARY KEY, data TEXT NOT NULL, ttl TEXT NOT NULL)`
+      let sql = `CREATE TABLE IF NOT EXISTS ${this._table_name} (id TEXT PRIMARY KEY, data TEXT NOT NULL, ttl INTEGER NOT NULL)`
       let dataResults = await this._dataApiClient.execute(sql)
       if(dataResults?.hasError()){
         log.error(dataResults?.getFirstError(), this._table_name)
