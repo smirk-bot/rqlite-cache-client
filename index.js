@@ -40,13 +40,13 @@ module.exports = class RqliteCache {
       if(!this._client_ready || !this._table_name) return
       if(this._json_only) return await this.allJSON()
 
-      let sql = `SELECT data FROM "${this._table_name}"`
+      let sql = `SELECT * FROM "${this._table_name}"`
       let res = await this._dataApiClient.query(sql)
       if(res?.hasError()){
         log.error(res?.getFirstError(), this._table_name)
         return
       }
-      return res?.toArray()?.filter(x=>x?.data)?.map(x=>x.data)
+      return res?.toArray()
     }catch(e){
       log.error(e, this._table_name)
     }
