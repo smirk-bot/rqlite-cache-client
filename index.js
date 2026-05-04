@@ -83,7 +83,20 @@ module.exports = class RqliteCache {
       log.error(e, this._table_name)
     }
   }
-
+  async expire(timestamp){
+    try{
+      if(!timestamp) return
+      let sql = `DELETE FROM "${this._table_name}" WHERE ttl < ${timestamp}`
+      let res = await this._dataApiClient.execute(sql)
+      if(res?.hasError()){
+        log.error(res?.getFirstError(), this._table_name)
+        return
+      }
+      return res?.get(0)?.getRowsAffected()
+    }catch(e){
+      log.error(e, this._table_name)
+    }
+  }
   async clear(){
     try{
       if(!this._client_ready || !this._table_name) return
